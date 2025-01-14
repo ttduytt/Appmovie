@@ -74,6 +74,19 @@ public class CacheConfiguration {
             createCache(cm, com.mycompany.myapp.repository.UserRepository.USERS_BY_LOGIN_CACHE, jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.repository.UserRepository.USERS_BY_EMAIL_CACHE, jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.domain.Authority.class.getName(), jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Actor.class.getName(), jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Actor.class.getName() + ".movies", jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Blog.class.getName(), jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Comment.class.getName(), jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Movie.class.getName(), jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Movie.class.getName() + ".comments", jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Movie.class.getName() + ".actors", jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Movie.class.getName() + ".topics", jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Nation.class.getName(), jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Nation.class.getName() + ".movies", jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Permission.class.getName(), jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Topic.class.getName(), jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Topic.class.getName() + ".movies", jcacheConfiguration);
             // jhipster-needle-redis-add-entry
         };
     }

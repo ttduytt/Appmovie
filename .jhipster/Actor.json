@@ -1,0 +1,32 @@
+{
+  "annotations": {
+    "changelogDate": "20250113142025"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "age",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "height",
+      "fieldType": "Double"
+    }
+  ],
+  "name": "Actor",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "movie",
+      "otherEntityRelationshipName": "actors",
+      "relationshipName": "movies",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}

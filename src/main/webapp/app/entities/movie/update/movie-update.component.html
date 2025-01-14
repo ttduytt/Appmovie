@@ -1,0 +1,151 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-movie-heading" data-cy="MovieCreateUpdateHeading">Create or edit a Movie</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_movieName">Movie Name</label>
+          <input type="text" class="form-control" name="movieName" id="field_movieName" data-cy="movieName" formControlName="movieName" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_release">Release</label>
+          <div class="input-group">
+            <input
+              id="field_release"
+              data-cy="release"
+              type="text"
+              class="form-control"
+              name="release"
+              ngbDatepicker
+              #releaseDp="ngbDatepicker"
+              formControlName="release"
+            />
+            <button type="button" class="btn btn-secondary" (click)="releaseDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_author">Author</label>
+          <input type="text" class="form-control" name="author" id="field_author" data-cy="author" formControlName="author" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_view">View</label>
+          <input type="number" class="form-control" name="view" id="field_view" data-cy="view" formControlName="view" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_numberEpisode">Number Episode</label>
+          <input
+            type="number"
+            class="form-control"
+            name="numberEpisode"
+            id="field_numberEpisode"
+            data-cy="numberEpisode"
+            formControlName="numberEpisode"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_avatar">Avatar</label>
+          <input type="text" class="form-control" name="avatar" id="field_avatar" data-cy="avatar" formControlName="avatar" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_linkMovie">Link Movie</label>
+          <input type="text" class="form-control" name="linkMovie" id="field_linkMovie" data-cy="linkMovie" formControlName="linkMovie" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_nation">Nation</label>
+          <select
+            class="form-control"
+            id="field_nation"
+            data-cy="nation"
+            name="nation"
+            formControlName="nation"
+            [compareWith]="compareNation"
+          >
+            <option [ngValue]="null"></option>
+            @for (nationOption of nationsSharedCollection; track $index) {
+              <option [ngValue]="nationOption">{{ nationOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="field_actors">Actors</label>
+          <select
+            class="form-control"
+            id="field_actors"
+            data-cy="actors"
+            multiple
+            name="actors"
+            formControlName="actors"
+            [compareWith]="compareActor"
+          >
+            @for (actorOption of actorsSharedCollection; track $index) {
+              <option [ngValue]="actorOption">{{ actorOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="field_topics">Topics</label>
+          <select
+            class="form-control"
+            id="field_topics"
+            data-cy="topics"
+            multiple
+            name="topics"
+            formControlName="topics"
+            [compareWith]="compareTopic"
+          >
+            @for (topicOption of topicsSharedCollection; track $index) {
+              <option [ngValue]="topicOption">{{ topicOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

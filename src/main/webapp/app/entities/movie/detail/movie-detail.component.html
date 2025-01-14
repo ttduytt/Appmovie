@@ -1,0 +1,88 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (movie(); as movieRef) {
+      <div>
+        <h2 data-cy="movieDetailsHeading"><span>Movie</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ movieRef.id }}</span>
+          </dd>
+          <dt><span>Movie Name</span></dt>
+          <dd>
+            <span>{{ movieRef.movieName }}</span>
+          </dd>
+          <dt><span>Release</span></dt>
+          <dd>
+            <span>{{ movieRef.release | formatMediumDate }}</span>
+          </dd>
+          <dt><span>Author</span></dt>
+          <dd>
+            <span>{{ movieRef.author }}</span>
+          </dd>
+          <dt><span>View</span></dt>
+          <dd>
+            <span>{{ movieRef.view }}</span>
+          </dd>
+          <dt><span>Description</span></dt>
+          <dd>
+            <span>{{ movieRef.description }}</span>
+          </dd>
+          <dt><span>Number Episode</span></dt>
+          <dd>
+            <span>{{ movieRef.numberEpisode }}</span>
+          </dd>
+          <dt><span>Avatar</span></dt>
+          <dd>
+            <span>{{ movieRef.avatar }}</span>
+          </dd>
+          <dt><span>Link Movie</span></dt>
+          <dd>
+            <span>{{ movieRef.linkMovie }}</span>
+          </dd>
+          <dt><span>Nation</span></dt>
+          <dd>
+            @if (movie()!.nation) {
+              <div>
+                <a [routerLink]="['/nation', movie()!.nation?.id, 'view']">{{ movieRef.nation?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span>Actors</span></dt>
+          <dd>
+            @for (actors of movieRef.actors; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/actor', actors.id, 'view']">{{ actors?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+          <dt><span>Topics</span></dt>
+          <dd>
+            @for (topics of movieRef.topics; track $index; let last = $last) {
+              <span>
+                <a [routerLink]="['/topic', topics.id, 'view']">{{ topics?.id }}</a
+                >{{ last ? '' : ', ' }}
+              </span>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/movie', movieRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

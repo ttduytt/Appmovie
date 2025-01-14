@@ -1,0 +1,73 @@
+{
+  "annotations": {
+    "changelogDate": "20250113142028"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "movieName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "release",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "author",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "view",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "numberEpisode",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "avatar",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "linkMovie",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Movie",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "comment",
+      "otherEntityRelationshipName": "movie",
+      "relationshipName": "comments",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "nation",
+      "otherEntityRelationshipName": "movies",
+      "relationshipName": "nation",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "actor",
+      "otherEntityRelationshipName": "movies",
+      "relationshipName": "actors",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "topic",
+      "otherEntityRelationshipName": "movies",
+      "relationshipName": "topics",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no"
+}

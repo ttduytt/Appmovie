@@ -1,0 +1,36 @@
+{
+  "annotations": {
+    "changelogDate": "20250113142027"
+  },
+  "applications": "*",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "date",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "like",
+      "fieldType": "Integer"
+    }
+  ],
+  "name": "Comment",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "movie",
+      "otherEntityRelationshipName": "comments",
+      "relationshipName": "movie",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no"
+}

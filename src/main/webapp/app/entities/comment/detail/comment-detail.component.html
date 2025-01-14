@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (comment(); as commentRef) {
+      <div>
+        <h2 data-cy="commentDetailsHeading"><span>Comment</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span>ID</span></dt>
+          <dd>
+            <span>{{ commentRef.id }}</span>
+          </dd>
+          <dt><span>Name</span></dt>
+          <dd>
+            <span>{{ commentRef.name }}</span>
+          </dd>
+          <dt><span>Content</span></dt>
+          <dd>
+            <span>{{ commentRef.content }}</span>
+          </dd>
+          <dt><span>Date</span></dt>
+          <dd>
+            <span>{{ commentRef.date | formatMediumDate }}</span>
+          </dd>
+          <dt><span>Like</span></dt>
+          <dd>
+            <span>{{ commentRef.like }}</span>
+          </dd>
+          <dt><span>Movie</span></dt>
+          <dd>
+            @if (comment()!.movie) {
+              <div>
+                <a [routerLink]="['/movie', comment()!.movie?.id, 'view']">{{ commentRef.movie?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/comment', commentRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

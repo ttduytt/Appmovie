@@ -1,0 +1,61 @@
+entity Movie {
+  movieName String
+  release LocalDate
+  author String
+  view Integer
+  description String
+  numberEpisode Integer
+  avatar String
+  linkMovie String
+}
+
+entity Actor {
+  name String
+  age Integer
+  height Double
+}
+
+entity Topic {
+  name String
+}
+
+entity Nation {
+  name String
+}
+
+entity Blog {
+  name String
+  content String
+}
+
+entity Comment {
+  name String
+  content String
+  date LocalDate
+  like Integer
+}
+
+entity Permission {
+  name String
+  description String
+}
+
+relationship OneToMany {
+  Movie{comments} to Comment{movie}
+}
+
+relationship ManyToOne {
+  Movie{nation} to Nation{movies}
+}
+
+relationship ManyToMany {
+  Movie{actors} to Actor{movies}
+}
+
+relationship ManyToMany {
+  Movie{topics} to Topic{movies}
+}
+
+paginate * with pagination
+
+
