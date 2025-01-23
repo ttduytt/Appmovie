@@ -3,6 +3,7 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.domain.Movie;
 import com.mycompany.myapp.repository.MovieRepository;
 import com.mycompany.myapp.service.RedisMovieService;
+import com.mycompany.myapp.service.RedisPublisherService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -39,10 +40,16 @@ public class MovieResource {
 
     private final MovieRepository movieRepository;
     private final RedisMovieService redisMovieService;
+    private final RedisPublisherService redisPublisherService;
 
-    public MovieResource(MovieRepository movieRepository, RedisMovieService redisMovieService) {
+    public MovieResource(
+        MovieRepository movieRepository,
+        RedisMovieService redisMovieService,
+        RedisPublisherService redisPublisherService
+    ) {
         this.movieRepository = movieRepository;
         this.redisMovieService = redisMovieService;
+        this.redisPublisherService = redisPublisherService;
     }
 
     /**
@@ -64,34 +71,93 @@ public class MovieResource {
             .body(movie);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<String> updateView(@PathVariable("id") final String id) {
-        redisMovieService.incrementViewCount(id);
+    @PostMapping("/updateView/{id}")
+    public ResponseEntity<String> updateView(@PathVariable("id") final Long id) {
+        redisMovieService.updateViewInRedis(id);
         return ResponseEntity.ok("Movie ID: " + id);
     }
 
-    @DeleteMapping("/delete-topview")
-    public void deleteTopView() {
-        //        redisMovieService.deleteTopmovie();
-        System.out.print("dd mẹ mày.");
+    // tìm kiêếm theo nhiều param
+    @GetMapping("/searchByFillter")
+    public List<Movie> searchMovies(
+        @RequestParam(value = "nationId", required = false) Long nationId,
+        @RequestParam(value = "topicId", required = false) Long topicId,
+        @RequestParam(value = "releaseYear", required = false) Integer releaseYear
+    ) {
+        // Tìm kiếm movie với các tiêu chí được cung cấp
+        return movieRepository.findMoviesByFilters(nationId, topicId, releaseYear);
     }
 
     @GetMapping("/topView")
-    public ResponseEntity<List<Map<String, Object>>> getTopViewedMovies(@RequestParam(name = "topN", defaultValue = "10") int topN) {
-        try {
-            // Lấy danh sách các bộ phim từ Redis
-            List<Map<String, Object>> topMovies = redisMovieService.getTopViewedMovies(topN);
+    public List<Movie> getTopMoviesByViews(@RequestParam(defaultValue = "10") int limit) {
+        return redisMovieService.getTopMoviesByViews(limit);
+    }
 
-            // Nếu không có dữ liệu từ Redis, lấy từ CSDL
-            if (topMovies == null || topMovies.isEmpty()) {
-                topMovies = movieRepository.getTopview(topN);
-            }
+    @PostMapping("/save/progress")
+    public ResponseEntity<String> saveProgress(
+        @RequestParam String userId,
+        @RequestParam String movieId,
+        @RequestParam int episode,
+        @RequestParam int minute
+    ) {
+        String result = redisMovieService.SaveProgressWatch(userId, movieId, episode, minute);
+        return ResponseEntity.ok(result);
+    }
 
-            return ResponseEntity.ok(topMovies);
-        } catch (Exception e) {
-            // Xử lý lỗi
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+    @GetMapping("/get/progress")
+    public ResponseEntity<Object> getProgress(@RequestParam String userId, @RequestParam String movieId) {
+        Object result = redisMovieService.getProgressWatch(userId, movieId);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/searchMovie/{key}")
+    public ResponseEntity<List<Movie>> searchMovie(@PathVariable("key") String key) {
+        List<Movie> listMovie = getMoviesFromCacheOrRepository(key);
+        return ResponseEntity.ok(listMovie);
+    }
+
+    // test dữ liệu time to live
+    //    @PostMapping("/testdulieu")
+    //    public String testdulieu() {
+    //       var a= redisMovieService.gettestgetcacheMovies();
+    //        return a;
+    //    }
+
+    // test dữ liệu view trong zset
+    //    @PostMapping("/testdulieu")
+    //    public String testdulieu() {
+    //        List<Movie> movies = movieRepository.findAll();
+    //        redisMovieService.saveViewInRedis(movies);
+    //        return "ok";
+    //    }
+
+    // test dữ liệu pub/sub
+    //    @PostMapping("/testdulieu")
+    //    public String testdulieu(@RequestParam(required = false) String message) {
+    //       if(message != null){
+    //           redisPublisherService.sendMessage(message);
+    //       }
+    //
+    //       return "gửi tin nhắn";
+    //    }
+
+    // Tách logic lấy movies
+    private List<Movie> getMoviesFromCacheOrRepository(String key) {
+        // Lấy danh sách movies từ cache
+        List<Movie> listMovie = redisMovieService.findMoviesByKeyword(key);
+
+        // Nếu cache rỗng hoặc không tìm thấy, tải từ DB và cache lại
+        if (listMovie == null || listMovie.isEmpty()) {
+            cacheAllMoviesToRedis();
+            listMovie = redisMovieService.findMoviesByKeyword(key); // Lấy lại từ cache
         }
+        return listMovie;
+    }
+
+    // Hàm toàn bộ movies từ DB vào redis
+    private void cacheAllMoviesToRedis() {
+        List<Movie> movies = movieRepository.findAll();
+        redisMovieService.cacheMovies(movies);
     }
 
     /**
@@ -238,5 +304,24 @@ public class MovieResource {
         return ResponseEntity.noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    // API thêm từ khóa tìm kiếm
+    @PostMapping("/SearchHistory")
+    public ResponseEntity<Void> addSearchTerm(@RequestParam String userId, @RequestParam String keySearch) {
+        redisMovieService.addToSearchHistory(userId, keySearch);
+        return ResponseEntity.ok().build();
+    }
+
+    // API lấy lịch sử tìm kiếm
+    @GetMapping("/SearchHistory")
+    public ResponseEntity<List<String>> getHistory(@RequestParam String userId) {
+        List<String> history = redisMovieService.getSearchHistory(userId);
+        return ResponseEntity.ok(history);
+    }
+
+    @DeleteMapping("/SearchHistory")
+    public void getHistory(@RequestParam String userId, @RequestParam String keySearch) {
+        redisMovieService.deleteSearchHistory(userId, keySearch);
     }
 }

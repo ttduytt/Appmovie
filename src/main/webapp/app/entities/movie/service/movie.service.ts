@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 
 import dayjs from 'dayjs/esm';
@@ -9,6 +9,7 @@ import { DATE_FORMAT } from 'app/config/input.constants';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IMovie, NewMovie } from '../movie.model';
+import { BehaviorSubject } from 'rxjs';
 
 export type PartialUpdateMovie = Partial<IMovie> & Pick<IMovie, 'id'>;
 
@@ -27,14 +28,63 @@ export type EntityArrayResponseType = HttpResponse<IMovie[]>;
 
 @Injectable({ providedIn: 'root' })
 export class MovieService {
+  moviesSubject = new BehaviorSubject<IMovie[]>([]);
+  currentListMovie = this.moviesSubject.asObservable();
   protected readonly http = inject(HttpClient);
   protected readonly applicationConfigService = inject(ApplicationConfigService);
 
   protected resourceUrl = this.applicationConfigService.getEndpointFor('api/movies');
 
+  // tạo BehaviorSubject để lắng nghe thay đổi của listmovie
+  changeListMovie(listMovie: IMovie[]): void {
+    this.moviesSubject.next(listMovie);
+  }
+
+  getTopMovie(): Observable<IMovie[]> {
+    const params = new HttpParams().set('limit', 10);
+
+    return this.http.get<IMovie[]>(`${this.resourceUrl}/topView`, { params });
+  }
+
+  updateViewMovie(movieId: number): Observable<any> {
+    const url = `${this.resourceUrl}/updateView/${movieId}`;
+    return this.http.post(url, {}); // Gửi POST request mà không có body
+  }
+
+  getProgressWatch(userId: number, movieId: number): Observable<any> {
+    const params = new HttpParams().set('userId', userId).set('movieId', movieId);
+
+    return this.http.get(`${this.resourceUrl}/get/progress`, { params });
+  }
+
   create(movie: NewMovie): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(movie);
     return this.http.post<RestMovie>(this.resourceUrl, copy, { observe: 'response' }).pipe(map(res => this.convertResponseFromServer(res)));
+  }
+
+  // api lưu dữ liệu vào history search
+  saveToHistorySearch(userId: number, keySearch: string): Observable<any> {
+    // Tạo HttpParams để thêm tham số truy vấn vào URL
+    const params = new HttpParams().set('userId', userId.toString()).set('keySearch', keySearch);
+
+    // Gửi yêu cầu POST
+    return this.http.post(`${this.resourceUrl}/SearchHistory`, null, { params });
+  }
+
+  saveToProgressWatch(userId: number, movieId: number, episode: number, minute: number): Observable<any> {
+    const params = new HttpParams().set('userId', userId).set('movieId', movieId).set('episode', episode).set('minute', minute);
+    return this.http.post(`${this.resourceUrl}/save/progress`, null, { params });
+  }
+
+  // api lấy danh sách history search
+  getHistorySearch(userId: number): Observable<string[]> {
+    const params = new HttpParams().set('userId', userId.toString());
+    return this.http.get<string[]>(`${this.resourceUrl}/SearchHistory`, { params });
+  }
+
+  // api get movie by key
+  getMovieByKey(key: string): Observable<IMovie[]> {
+    return this.http.get<IMovie[]>(`${this.resourceUrl}/searchMovie/${key}`);
   }
 
   update(movie: IMovie): Observable<EntityResponseType> {

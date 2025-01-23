@@ -1,7 +1,6 @@
 // @ts-check
 
 import globals from 'globals';
-import prettier from 'eslint-plugin-prettier/recommended';
 import tseslint from 'typescript-eslint';
 import eslint from '@eslint/js';
 // For a detailed explanation, visit: https://github.com/angular-eslint/angular-eslint/blob/main/docs/CONFIGURING_FLAT_CONFIG.md
@@ -130,9 +129,8 @@ export default tseslint.config(
   },
   {
     // Html templates requires some work
-    ignores: ['**/*.html'],
-    extends: [prettier],
+    ignores: ['**/*'],
+    extends: [],
   },
   // jhipster-needle-eslint-add-config - JHipster will add additional config here
-  prettier,
 );

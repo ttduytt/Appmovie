@@ -1,4 +1,4 @@
-<div class="d-flex justify-content-center">
+<div *jhiHasAnyAuthority="'ROLE_ADMIN'" class="d-flex justify-content-center">
   <div class="col-8">
     @if (movie(); as movieRef) {
       <div>
@@ -51,7 +51,7 @@
           <dd>
             @if (movie()!.nation) {
               <div>
-                <a [routerLink]="['/nation', movie()!.nation?.id, 'view']">{{ movieRef.nation?.id }}</a>
+                <a [routerLink]="['/nation', movie()!.nation?.id, 'view']">{{ movieRef.nation?.name }}ss</a>
               </div>
             }
           </dd>
@@ -59,7 +59,7 @@
           <dd>
             @for (actors of movieRef.actors; track $index; let last = $last) {
               <span>
-                <a [routerLink]="['/actor', actors.id, 'view']">{{ actors?.id }}</a
+                <a [routerLink]="['/actor', actors.id, 'view']">{{ actors?.name }}</a
                 >{{ last ? '' : ', ' }}
               </span>
             }
@@ -68,7 +68,7 @@
           <dd>
             @for (topics of movieRef.topics; track $index; let last = $last) {
               <span>
-                <a [routerLink]="['/topic', topics.id, 'view']">{{ topics?.id }}</a
+                <a [routerLink]="['/topic', topics.id, 'view']">{{ topics?.name }}</a
                 >{{ last ? '' : ', ' }}
               </span>
             }
@@ -85,4 +85,54 @@
       </div>
     }
   </div>
+</div>
+
+<div *jhiHasAnyAuthority="'ROLE_USER'" class="col-lg-8 movie-details">
+  @if (movie(); as movieRef) {
+    <div class="row">
+      <div class="col-md-5">
+        <img style="height: 80%; object-fit: cover" [src]="movieRef.avatar" alt="TỚ Hồng Nhan" class="img-fluid movie-poster" />
+        <div class="d-flex justify-content-center mt-3">
+          <button style="margin-right: 10px" class="btn btn-primary">Tải phim</button>
+          <button
+            [routerLink]="['/movie/watchmovie', movieRef.id]"
+            (click)="updateView(movieRef.id)"
+            style="margin-left: 10px"
+            class="btn btn-danger"
+          >
+            Xem phim
+          </button>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <h2 class="movie-title">{{ movieRef.movieName }}</h2>
+        <h6 style="color: white" class="">{{ movieRef.description }}</h6>
+        <ul class="movie-info list-unstyled mt-3">
+          <li><strong>Trạng thái:</strong> Hoàn Thành</li>
+          <li><strong>Thời lượng:</strong> 15 phút / tập</li>
+          <li><strong>Số tập: </strong>{{ movieRef.numberEpisode }} Tập</li>
+          <li><strong>Tình trạng: </strong> Phim Hoàn Tất</li>
+          <li><strong>Ngôn ngữ: </strong> Phụ đề Việt</li>
+          <li><strong>Năm sản xuất: </strong>{{ getYear(movieRef.release) }}</li>
+          <li><strong>Quốc gia: </strong> {{ movieRef.nation?.name }}</li>
+          <li>
+            Thể loại:
+            @for (topic of movieRef.topics; track $index) {
+              <strong></strong>{{ topic.name }};
+            }
+          </li>
+          <li>
+            Diễn Viên:
+            @for (actor of movieRef.actors; track $index) {
+              <strong></strong>{{ actor.name }};
+            }
+          </li>
+        </ul>
+        <div class="rating mt-3">
+          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9734;&#9734;</span>
+          <span class="score">(8 điểm / 1 lượt)</span>
+        </div>
+      </div>
+    </div>
+  }
 </div>

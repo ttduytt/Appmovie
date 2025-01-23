@@ -14,6 +14,22 @@ const movieRoute: Routes = [
     canActivate: [UserRouteAccessService],
   },
   {
+    path: 'searchMovie',
+    loadComponent: () => import('./list-movie-search/list-movie-search.component').then(m => m.ListMovieSearchComponent),
+    data: {
+      defaultSort: `id,${ASC}`,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
+    path: 'watchmovie/:id',
+    loadComponent: () => import('./watch-movie/watch-movie.component').then(m => m.WatchMovieComponent),
+    resolve: {
+      movie: MovieResolve,
+    },
+    canActivate: [UserRouteAccessService],
+  },
+  {
     path: ':id/view',
     loadComponent: () => import('./detail/movie-detail.component').then(m => m.MovieDetailComponent),
     resolve: {

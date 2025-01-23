@@ -34,3 +34,133 @@ Logo styles
   background: url('/content/images/logo-jhipster.png') no-repeat center center;
   background-size: contain;
 }
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background-color: #222; /* Màu nền đen */
+  border: 1px solid #555; /* Viền xám nhạt */
+  border-radius: 4px;
+  padding: 5px 10px;
+  width: 80%; /* Chiều rộng */
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Tạo hiệu ứng nổi */
+  position: relative;
+}
+
+/* Kiểu của input */
+.search-box input {
+  flex: 1;
+  border: none;
+  background: none;
+  outline: none;
+  color: #fff; /* Màu chữ trắng */
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+}
+
+.search-box:focus-within {
+  border: 2px solid white;
+}
+
+.search-box svg {
+  height: 20px;
+  fill: #fff;
+}
+
+.content_search {
+  width: 70%;
+  display: flex;
+  justify-content: center;
+}
+
+.search-results {
+  width: 600px;
+  background-color: #333; /* Nền đen */
+  color: #fff; /* Chữ trắng */
+  border-radius: 6px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Hiệu ứng đổ bóng */
+  font-family: Arial, sans-serif;
+  position: absolute;
+  z-index: 1;
+  top: 120%;
+  left: 0;
+  visibility: hidden;
+}
+
+.search-box input:focus + .search-results {
+  visibility: visible;
+}
+
+/* Tiêu đề phần trên */
+.header {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.header .keyword {
+  color: #f39c12; /* Màu vàng nổi bật */
+}
+
+/* Phân loại (ví dụ: "Phim") */
+.category {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #e67e22; /* Màu cam nhạt */
+}
+
+/* Danh sách kết quả */
+.result-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.result-list li {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #555; /* Viền phân cách */
+  padding: 10px 0;
+}
+
+.result-list li svg {
+  height: 15px;
+}
+
+.result-list li:hover span {
+  color: #f1c40f;
+}
+
+.result-list li:hover {
+  cursor: pointer;
+}
+
+.result-list li:last-child {
+  border-bottom: none; /* Bỏ viền cuối */
+}
+
+/* Tiêu đề mỗi kết quả */
+.title {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ecf0f1; /* Màu xám nhạt */
+  margin-bottom: 3px;
+}
+
+/* Phụ đề mỗi kết quả */
+.subtitle {
+  font-size: 12px;
+  color: #bdc3c7; /* Màu xám tối */
+}
+
+/* Tô đậm từ khóa nổi bật */
+.highlight {
+  color: #f1c40f; /* Màu vàng */
+  font-weight: bold;
+}
+
+.iconSearch {
+  cursor: pointer;
+}

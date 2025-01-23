@@ -1,0 +1,15 @@
+<h1>YouTube Video Player</h1>
+@if (movie) {
+  <div class="video-container">
+    <!-- Replace the YouTube video URL below with your desired video -->
+    <iframe
+      id="youtube-player"
+      [src]="sanitizedUrl"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen
+    >
+    </iframe>
+  </div>
+} @else {
+  <h1>Phim Hiện Đang Lỗi Vui Lòng Thử Lại</h1>
+}

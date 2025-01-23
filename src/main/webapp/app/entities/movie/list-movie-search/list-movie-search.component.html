@@ -1,0 +1,134 @@
+<div *jhiHasAnyAuthority="'ROLE_USER'" class="contentMain">
+  <div class="body col-lg-9">
+    @if (movies.length > 0) {
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="row">
+            @for (movie of movies; track trackId(movie)) {
+              <div [routerLink]="['/movie', movie.id, 'view']" class="col-md-3 mb-4">
+                <div class="card">
+                  <img [src]="movie.avatar" class="card-img-top" />
+                  <div class="overlay">{{ movie.description }}</div>
+                  <h3 class="card-title">{{ movie.movieName }}</h3>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    } @else {
+      <h1 style="width: 100%; margin-top: 30px; text-align: center">Not Found Any Movie</h1>
+    }
+  </div>
+
+  <!-- Trending Sidebar -->
+  <div class="col-lg-3">
+    <div class="trending-section">
+      <h5 class="text-orange">TRENDING</h5>
+      <hr class="text-light" />
+
+      <!-- Tabs -->
+      <ul class="nav nav-tabs mb-3" id="trending-tabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="day-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#day"
+            type="button"
+            role="tab"
+            aria-controls="day"
+            aria-selected="true"
+          >
+            Ngày
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="week-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#week"
+            type="button"
+            role="tab"
+            aria-controls="week"
+            aria-selected="false"
+          >
+            Tuần
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="month-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#month"
+            type="button"
+            role="tab"
+            aria-controls="month"
+            aria-selected="false"
+          >
+            Tháng
+          </button>
+        </li>
+      </ul>
+
+      <!-- Tab Content -->
+      <div class="tab-content" id="trending-tab-content">
+        <div class="tab-pane fade show active" id="day" role="tabpanel" aria-labelledby="day-tab">
+          <ul class="list-unstyled">
+            <li class="d-flex align-items-start mb-2">
+              <span class="badge bg-orange me-2">1</span>
+              <div>
+                <strong>Bạch Nguyệt Phân Tình</strong>
+                <p class="mb-0 text-muted">12 lượt quan tâm</p>
+              </div>
+            </li>
+            <li class="d-flex align-items-start mb-2">
+              <span class="badge bg-orange me-2">2</span>
+              <div>
+                <strong>Quốc Sắc Phượng Hoa</strong>
+                <p class="mb-0 text-muted">9 lượt quan tâm</p>
+              </div>
+            </li>
+            <li class="d-flex align-items-start mb-2">
+              <span class="badge bg-orange me-2">3</span>
+              <div>
+                <strong>Đại Phụng Đã Canh Nhàn</strong>
+                <p class="mb-0 text-muted">5 lượt quan tâm</p>
+              </div>
+            </li>
+            <li class="d-flex align-items-start mb-2">
+              <span class="badge bg-orange me-2">4</span>
+              <div>
+                <strong>Thiên Đóa Đào Hoa Nhất Thế Khai</strong>
+                <p class="mb-0 text-muted">5 lượt quan tâm</p>
+              </div>
+            </li>
+            <li class="d-flex align-items-start mb-2">
+              <span class="badge bg-orange me-2">5</span>
+              <div>
+                <strong>Chuyện Nàng Ok</strong>
+                <p class="mb-0 text-muted">3 lượt quan tâm</p>
+              </div>
+            </li>
+            <li class="d-flex align-items-start mb-2">
+              <span class="badge bg-orange me-2">6</span>
+              <div>
+                <strong>Nhà Nghỉ California</strong>
+                <p class="mb-0 text-muted">2 lượt quan tâm</p>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <div class="tab-pane fade" id="week" role="tabpanel" aria-labelledby="week-tab">
+          <p class="text-muted">Nội dung đang cập nhật cho Tuần...</p>
+        </div>
+        <div class="tab-pane fade" id="month" role="tabpanel" aria-labelledby="month-tab">
+          <p class="text-muted">Nội dung đang cập nhật cho Tháng...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

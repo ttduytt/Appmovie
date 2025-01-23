@@ -91,7 +91,7 @@
           >
             <option [ngValue]="null"></option>
             @for (nationOption of nationsSharedCollection; track $index) {
-              <option [ngValue]="nationOption">{{ nationOption.id }}</option>
+              <option [ngValue]="nationOption">{{ nationOption.name }}</option>
             }
           </select>
         </div>
@@ -108,7 +108,7 @@
             [compareWith]="compareActor"
           >
             @for (actorOption of actorsSharedCollection; track $index) {
-              <option [ngValue]="actorOption">{{ actorOption.id }}</option>
+              <option [ngValue]="actorOption">{{ actorOption.name }}</option>
             }
           </select>
         </div>
@@ -125,7 +125,7 @@
             [compareWith]="compareTopic"
           >
             @for (topicOption of topicsSharedCollection; track $index) {
-              <option [ngValue]="topicOption">{{ topicOption.id }}</option>
+              <option [ngValue]="topicOption">{{ topicOption.name }}</option>
             }
           </select>
         </div>

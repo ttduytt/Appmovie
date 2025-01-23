@@ -1,0 +1,41 @@
+.movie-details {
+  background-color: #1f1f1f;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.movie-poster {
+  border-radius: 8px;
+}
+
+.movie-title {
+  color: #ffa500;
+  font-weight: bold;
+}
+
+.movie-info li {
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: #cccccc;
+}
+
+.movie-info strong {
+  color: #ffffff;
+}
+
+.btn {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.rating .stars {
+  color: #ffa500;
+  font-size: 16px;
+}
+
+.rating .score {
+  margin-left: 10px;
+  color: #bbbbbb;
+}

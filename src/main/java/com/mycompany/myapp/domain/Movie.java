@@ -50,7 +50,7 @@ public class Movie implements Serializable {
     @JsonIgnoreProperties(value = { "movie" }, allowSetters = true)
     private Set<Comment> comments = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = { "movies" }, allowSetters = true)
     private Nation nation;
 

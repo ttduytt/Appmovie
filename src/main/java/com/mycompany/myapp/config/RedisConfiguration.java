@@ -1,14 +1,18 @@
 package com.mycompany.myapp.config;
 
+import com.mycompany.myapp.service.MessageSubscriber;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import redis.clients.jedis.UnifiedJedis;
 
 @Configuration
 public class RedisConfiguration {
@@ -18,6 +22,37 @@ public class RedisConfiguration {
 
     @Value("localhost")
     private String redisHost;
+
+    @Bean
+    public RedisMessageListenerContainer container(
+        RedisConnectionFactory connectionFactory,
+        MessageListenerAdapter messageListener1,
+        MessageListenerAdapter messageListener2
+    ) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+
+        // đây là code để 1 sucriber lắng nghe message(có thể điều chỉnh thành 2 sucribe lắng nghe 1 message)
+        container.addMessageListener(messageListener1, new PatternTopic(redisChanel()));
+        container.addMessageListener(messageListener2, new PatternTopic(redisChanel()));
+
+        return container;
+    }
+
+    @Bean
+    public MessageListenerAdapter messageListener1(MessageSubscriber receiver1) {
+        return new MessageListenerAdapter(receiver1, "receiverMessage");
+    }
+
+    @Bean
+    public MessageListenerAdapter messageListener2(MessageSubscriber receiver2) {
+        return new MessageListenerAdapter(receiver2, "receiverMessageactor");
+    }
+
+    @Bean
+    public String redisChanel() {
+        return "exampleApp";
+    }
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {

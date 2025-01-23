@@ -1,5 +1,6 @@
 package com.mycompany.myapp.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module;
 import com.fasterxml.jackson.datatype.hibernate6.Hibernate6Module.Feature;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
@@ -18,6 +19,13 @@ public class JacksonConfiguration {
     public JavaTimeModule javaTimeModule() {
         return new JavaTimeModule();
     }
+
+    //    @Bean
+    //    public ObjectMapper objectMapper() {
+    //        ObjectMapper objectMapper = new ObjectMapper();
+    //        objectMapper.registerModule(new JavaTimeModule());
+    //        return objectMapper;
+    //    }
 
     @Bean
     public Jdk8Module jdk8TimeModule() {

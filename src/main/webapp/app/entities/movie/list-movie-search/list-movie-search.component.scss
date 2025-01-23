@@ -1,0 +1,111 @@
+.contentMain {
+  display: flex;
+}
+
+.body {
+  background-color: #121212;
+  color: #fff;
+}
+
+.card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #1f1f1f;
+  text-align: center;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-bottom: 2px solid #fff;
+}
+
+.overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.card-title {
+  margin: 10px 0;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.trending-section {
+  background-color: #1f1f1f;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.text-orange {
+  color: #ffa500;
+}
+
+.nav-tabs .nav-link {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-weight: bold;
+  padding: 10px 15px;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #ffa500;
+  color: #000;
+  border-radius: 4px;
+}
+
+.tab-content {
+  margin-top: 15px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.bg-orange {
+  background-color: #ffa500;
+  color: #000;
+}
+
+.list-unstyled {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: #fff;
+}
+
+.list-unstyled li {
+  display: flex;
+  align-items: center;
+  background-color: #2a2a2a;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.text-muted {
+  font-size: 12px;
+  color: #bbb;
+}

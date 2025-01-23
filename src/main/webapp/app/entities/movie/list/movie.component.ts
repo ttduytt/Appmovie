@@ -15,6 +15,7 @@ import { DEFAULT_SORT_DATA, ITEM_DELETED_EVENT, SORT } from 'app/config/navigati
 import { IMovie } from '../movie.model';
 import { EntityArrayResponseType, MovieService } from '../service/movie.service';
 import { MovieDeleteDialogComponent } from '../delete/movie-delete-dialog.component';
+import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
 
 @Component({
   standalone: true,
@@ -30,12 +31,15 @@ import { MovieDeleteDialogComponent } from '../delete/movie-delete-dialog.compon
     FormatMediumDatetimePipe,
     FormatMediumDatePipe,
     ItemCountComponent,
+    HasAnyAuthorityDirective,
   ],
+  styleUrl: '../../../../content/scss/listMovie.scss',
 })
 export class MovieComponent implements OnInit {
   subscription: Subscription | null = null;
   movies?: IMovie[];
   isLoading = false;
+  topMovies?: IMovie[];
 
   sortState = sortStateSignal({});
 
@@ -59,6 +63,8 @@ export class MovieComponent implements OnInit {
         tap(() => this.load()),
       )
       .subscribe();
+
+    this.getTopView();
   }
 
   delete(movie: IMovie): void {
@@ -71,6 +77,12 @@ export class MovieComponent implements OnInit {
         tap(() => this.load()),
       )
       .subscribe();
+  }
+
+  getTopView() {
+    this.movieService.getTopMovie().subscribe(data => {
+      this.topMovies = data;
+    });
   }
 
   load(): void {

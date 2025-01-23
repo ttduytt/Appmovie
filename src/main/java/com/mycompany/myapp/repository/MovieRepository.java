@@ -30,6 +30,20 @@ public interface MovieRepository extends MovieRepositoryWithBagRelationships, Jp
         return this.fetchBagRelationships(this.findAll(pageable));
     }
 
-    @Query(value = "SELECT * FROM movies ORDER BY views DESC LIMIT :topN", nativeQuery = true)
-    List<Map<String, Object>> getTopview(@Param("topN") int topN);
+    @Query(value = "SELECT m FROM Movie m WHERE m.id IN :ids")
+    List<Movie> findMoviesByIds(@Param("ids") List<Long> ids);
+
+    // Tìm kiếm theo nationId, topicId và releaseYear
+    @Query(
+        "SELECT m FROM Movie m " +
+        "JOIN m.topics t " + // JOIN với bảng liên kết 'topic'
+        "WHERE (:nationId IS NULL OR m.nation.id = :nationId) " + // Lọc theo nationId nếu có
+        "AND (:topicId IS NULL OR t.id = :topicId) " + // Lọc theo topicId nếu có
+        "AND (:releaseYear IS NULL OR YEAR(m.release) = :releaseYear)"
+    ) // Lọc theo releaseYear nếu có
+    List<Movie> findMoviesByFilters(
+        @Param("nationId") Long nationId, // nationId là ID của quốc gia
+        @Param("topicId") Long topicId, // topicId là ID của thể loại
+        @Param("releaseYear") Integer releaseYear
+    ); // releaseYear là năm phát hành
 }
