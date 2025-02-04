@@ -1,5 +1,6 @@
 package com.mycompany.myapp.repository;
 
+import com.mycompany.myapp.domain.Comment;
 import com.mycompany.myapp.domain.Movie;
 import java.util.List;
 import java.util.Map;

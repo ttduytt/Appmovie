@@ -12,7 +12,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -153,11 +155,46 @@ public class CommentResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of comments in body.
      */
+
     @GetMapping("")
     public ResponseEntity<List<Comment>> getAllComments(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         LOG.debug("REST request to get a page of Comments");
         Page<Comment> page = commentRepository.findAll(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/movieComment")
+    public ResponseEntity<List<Comment>> getCommentsByMovieId(
+        @org.springdoc.core.annotations.ParameterObject Pageable pageable,
+        @RequestParam(name = "movieId", required = true) Long movieId, // Lấy movieId từ request
+        @RequestParam(name = "sortBy", required = false) String sortBy
+    ) {
+        LOG.debug("REST request to get comments for movieId: {}", movieId);
+
+        // Kiểm tra giá trị movieId hợp lệ
+        if (movieId == null) {
+            return ResponseEntity.badRequest().build(); // Trả về lỗi nếu không có movieId
+        }
+
+        // Khởi tạo Sort dựa trên giá trị sortBy
+        Sort sort = Sort.unsorted(); // Không sắp xếp mặc định
+        if ("like".equalsIgnoreCase(sortBy)) {
+            sort = Sort.by(Sort.Order.desc("like")); // Sắp xếp giảm dần theo like
+        } else if ("date".equalsIgnoreCase(sortBy)) {
+            sort = Sort.by(Sort.Order.desc("date")); // Sắp xếp giảm dần theo date
+        }
+
+        // Tạo Pageable mới với thông tin sắp xếp
+        Pageable sortedPageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        // Truy vấn dữ liệu với điều kiện movie_id
+        Page<Comment> page = commentRepository.findByMovieId(movieId, sortedPageable);
+
+        // Tạo headers phân trang
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+
+        // Trả về danh sách dữ liệu và headers
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 

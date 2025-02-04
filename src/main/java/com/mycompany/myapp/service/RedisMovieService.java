@@ -72,6 +72,10 @@ public class RedisMovieService {
         return movies;
     }
 
+    public void addToSet(String setName, String value) {
+        redisTemplate.opsForSet().add(setName, value);
+    }
+
     // lưu tiến trình xem phim với redis
     public String SaveProgressWatch(String idUser, String idMovie, int episode, int minute) {
         String redisKey = REDIS_MOVIE_PROGRESS_KEY_PREFIX + idUser;

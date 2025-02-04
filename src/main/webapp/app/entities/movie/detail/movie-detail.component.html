@@ -87,52 +87,88 @@
   </div>
 </div>
 
-<div *jhiHasAnyAuthority="'ROLE_USER'" class="col-lg-8 movie-details">
-  @if (movie(); as movieRef) {
-    <div class="row">
-      <div class="col-md-5">
-        <img style="height: 80%; object-fit: cover" [src]="movieRef.avatar" alt="TỚ Hồng Nhan" class="img-fluid movie-poster" />
-        <div class="d-flex justify-content-center mt-3">
-          <button style="margin-right: 10px" class="btn btn-primary">Tải phim</button>
-          <button
-            [routerLink]="['/movie/watchmovie', movieRef.id]"
-            (click)="updateView(movieRef.id)"
-            style="margin-left: 10px"
-            class="btn btn-danger"
-          >
-            Xem phim
-          </button>
+<div *jhiHasAnyAuthority="'ROLE_USER'">
+  <div class="col-lg-8 movie-details">
+    @if (movie(); as movieRef) {
+      <div class="row">
+        <div class="col-md-5">
+          <img style="height: 80%; object-fit: cover" [src]="movieRef.avatar" alt="TỚ Hồng Nhan" class="img-fluid movie-poster" />
+          <div class="d-flex justify-content-center mt-3">
+            <button style="margin-right: 10px" class="btn btn-primary">Tải phim</button>
+            <button
+              [routerLink]="['/movie/watchmovie', movieRef.id]"
+              (click)="updateView(movieRef.id)"
+              style="margin-left: 10px"
+              class="btn btn-danger"
+            >
+              Xem phim
+            </button>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <h2 class="movie-title">{{ movieRef.movieName }}</h2>
+          <h6 style="color: white" class="">{{ movieRef.description }}</h6>
+          <ul class="movie-info list-unstyled mt-3">
+            <li><strong>Trạng thái:</strong> Hoàn Thành</li>
+            <li><strong>Thời lượng:</strong> 15 phút / tập</li>
+            <li><strong>Số tập: </strong>{{ movieRef.numberEpisode }} Tập</li>
+            <li><strong>Tình trạng: </strong> Phim Hoàn Tất</li>
+            <li><strong>Ngôn ngữ: </strong> Phụ đề Việt</li>
+            <li><strong>Năm sản xuất: </strong>{{ getYear(movieRef.release) }}</li>
+            <li><strong>Quốc gia: </strong> {{ movieRef.nation?.name }}</li>
+            <li>
+              Thể loại:
+              @for (topic of movieRef.topics; track $index) {
+                <strong></strong>{{ topic.name }};
+              }
+            </li>
+            <li>
+              Diễn Viên:
+              @for (actor of movieRef.actors; track $index) {
+                <strong></strong>{{ actor.name }};
+              }
+            </li>
+          </ul>
+          <div class="rating mt-3">
+            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9734;&#9734;</span>
+            <span class="score">(8 điểm / 1 lượt)</span>
+          </div>
         </div>
       </div>
-      <div class="col-md-7">
-        <h2 class="movie-title">{{ movieRef.movieName }}</h2>
-        <h6 style="color: white" class="">{{ movieRef.description }}</h6>
-        <ul class="movie-info list-unstyled mt-3">
-          <li><strong>Trạng thái:</strong> Hoàn Thành</li>
-          <li><strong>Thời lượng:</strong> 15 phút / tập</li>
-          <li><strong>Số tập: </strong>{{ movieRef.numberEpisode }} Tập</li>
-          <li><strong>Tình trạng: </strong> Phim Hoàn Tất</li>
-          <li><strong>Ngôn ngữ: </strong> Phụ đề Việt</li>
-          <li><strong>Năm sản xuất: </strong>{{ getYear(movieRef.release) }}</li>
-          <li><strong>Quốc gia: </strong> {{ movieRef.nation?.name }}</li>
-          <li>
-            Thể loại:
-            @for (topic of movieRef.topics; track $index) {
-              <strong></strong>{{ topic.name }};
-            }
-          </li>
-          <li>
-            Diễn Viên:
-            @for (actor of movieRef.actors; track $index) {
-              <strong></strong>{{ actor.name }};
-            }
-          </li>
+    }
+  </div>
+
+  <div class="col-lg-8 movie-comment">
+    <form name="editForm" novalidate (ngSubmit)="saveComment()" [formGroup]="editForm">
+      <div class="mb-3">
+        <label class="form-label" for="field_content">Content</label>
+        <input type="text" class="form-control" name="content" id="field_content" data-cy="content" formControlName="content" />
+      </div>
+      <button type="submit">Đăng</button>
+    </form>
+    @if (comments) {
+      <div style="padding: 30px">
+        <div class="headComment">
+          <p><strong>90 bình luận</strong></p>
+          <div class="arrangeControl">
+            <label for=""><strong>Sắp xếp theo</strong></label>
+            <select (change)="onSelectChange($event)">
+              <option value="date">Thời gian</option>
+              <option value="like">Like</option>
+            </select>
+          </div>
+        </div>
+        <ul class="list_comment">
+          @for (item of comments; track $index) {
+            <li>
+              {{ item.content }}
+              <div>lượt thích:{{ item.like }}</div>
+              <span>ngày:{{ item.date }}</span>
+              <button (click)="DeleteComment(item.id, item.user?.id)" type="button">Xóa</button>
+            </li>
+          }
         </ul>
-        <div class="rating mt-3">
-          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9733;&#9734;&#9734;</span>
-          <span class="score">(8 điểm / 1 lượt)</span>
-        </div>
       </div>
-    </div>
-  }
+    }
+  </div>
 </div>

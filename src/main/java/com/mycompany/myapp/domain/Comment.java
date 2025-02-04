@@ -36,6 +36,11 @@ public class Comment implements Serializable {
     @JsonIgnoreProperties(value = { "comments", "nation", "actors", "topics" }, allowSetters = true)
     private Movie movie;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties(value = { "comments" }, allowSetters = true)
+    private User user;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -45,6 +50,14 @@ public class Comment implements Serializable {
     public Comment id(Long id) {
         this.setId(id);
         return this;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public void setId(Long id) {

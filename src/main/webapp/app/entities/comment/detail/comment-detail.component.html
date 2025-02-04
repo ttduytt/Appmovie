@@ -39,6 +39,13 @@
               </div>
             }
           </dd>
+          <dd>
+            @if (comment()!.user) {
+              <div>
+                <a [routerLink]="['/user', comment()!.user?.id, 'view']">{{ commentRef.user?.id }}</a>
+              </div>
+            }
+          </dd>
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

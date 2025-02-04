@@ -54,6 +54,7 @@ public class RedisConfiguration {
         return "exampleApp";
     }
 
+    // cấu hình RedisTemplate
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();

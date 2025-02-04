@@ -8,7 +8,9 @@ import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IMovie } from 'app/entities/movie/movie.model';
+import { IUser } from '../../user/user.model';
 import { MovieService } from 'app/entities/movie/service/movie.service';
+import { UserService } from '../../user/service/user.service';
 import { IComment } from '../comment.model';
 import { CommentService } from '../service/comment.service';
 import { CommentFormGroup, CommentFormService } from './comment-form.service';
@@ -24,10 +26,12 @@ export class CommentUpdateComponent implements OnInit {
   comment: IComment | null = null;
 
   moviesSharedCollection: IMovie[] = [];
+  usersSharedCollection: IUser[] = [];
 
   protected commentService = inject(CommentService);
   protected commentFormService = inject(CommentFormService);
   protected movieService = inject(MovieService);
+  protected userService = inject(UserService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
@@ -84,6 +88,7 @@ export class CommentUpdateComponent implements OnInit {
     this.commentFormService.resetForm(this.editForm, comment);
 
     this.moviesSharedCollection = this.movieService.addMovieToCollectionIfMissing<IMovie>(this.moviesSharedCollection, comment.movie);
+    this.usersSharedCollection = this.userService.addUserToCollectionIfMissing<IUser>(this.usersSharedCollection, comment.user);
   }
 
   protected loadRelationshipsOptions(): void {
@@ -92,5 +97,11 @@ export class CommentUpdateComponent implements OnInit {
       .pipe(map((res: HttpResponse<IMovie[]>) => res.body ?? []))
       .pipe(map((movies: IMovie[]) => this.movieService.addMovieToCollectionIfMissing<IMovie>(movies, this.comment?.movie)))
       .subscribe((movies: IMovie[]) => (this.moviesSharedCollection = movies));
+
+    this.userService
+      .query()
+      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
+      .pipe(map((users: IUser[]) => this.userService.addUserToCollectionIfMissing<IMovie>(users, this.comment?.user)))
+      .subscribe((users: IUser[]) => (this.usersSharedCollection = users));
   }
 }

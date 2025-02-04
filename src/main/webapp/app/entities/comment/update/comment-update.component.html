@@ -14,11 +14,6 @@
         }
 
         <div class="mb-3">
-          <label class="form-label" for="field_name">Name</label>
-          <input type="text" class="form-control" name="name" id="field_name" data-cy="name" formControlName="name" />
-        </div>
-
-        <div class="mb-3">
           <label class="form-label" for="field_content">Content</label>
           <input type="text" class="form-control" name="content" id="field_content" data-cy="content" formControlName="content" />
         </div>
@@ -51,6 +46,15 @@
             <option [ngValue]="null"></option>
             @for (movieOption of moviesSharedCollection; track $index) {
               <option [ngValue]="movieOption">{{ movieOption.id }}</option>
+            }
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="field_movie">User</label>
+          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user" [compareWith]="compareMovie">
+            <option [ngValue]="null"></option>
+            @for (userOption of usersSharedCollection; track $index) {
+              <option [ngValue]="userOption">{{ userOption.id }}</option>
             }
           </select>
         </div>

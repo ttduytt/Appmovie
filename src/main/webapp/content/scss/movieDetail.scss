@@ -39,3 +39,26 @@
   margin-left: 10px;
   color: #bbbbbb;
 }
+
+.movie-comment {
+  background-color: white;
+  border: 1px solid;
+}
+
+.headComment {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid;
+  font-size: 20px;
+}
+
+.list_comment {
+  list-style: none;
+  padding: 0;
+}
+
+.list_comment li {
+  padding: 10px 0;
+  font-size: 18px;
+  font-weight: 500;
+}

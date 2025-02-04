@@ -2,6 +2,7 @@ package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.domain.Movie;
 import com.mycompany.myapp.repository.MovieRepository;
+import com.mycompany.myapp.service.KafkaProducerService;
 import com.mycompany.myapp.service.RedisMovieService;
 import com.mycompany.myapp.service.RedisPublisherService;
 import com.mycompany.myapp.web.rest.errors.BadRequestAlertException;
@@ -41,15 +42,18 @@ public class MovieResource {
     private final MovieRepository movieRepository;
     private final RedisMovieService redisMovieService;
     private final RedisPublisherService redisPublisherService;
+    private final KafkaProducerService kafkaProducerService;
 
     public MovieResource(
         MovieRepository movieRepository,
         RedisMovieService redisMovieService,
-        RedisPublisherService redisPublisherService
+        RedisPublisherService redisPublisherService,
+        KafkaProducerService kafkaProducerService
     ) {
         this.movieRepository = movieRepository;
         this.redisMovieService = redisMovieService;
         this.redisPublisherService = redisPublisherService;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     /**

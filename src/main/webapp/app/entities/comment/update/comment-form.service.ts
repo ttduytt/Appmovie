@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { IComment, NewComment } from '../comment.model';
+import { IUser } from '../../user/user.model';
 
 /**
  * A partial Type with required key is used as form input.
@@ -18,11 +19,11 @@ type CommentFormDefaults = Pick<NewComment, 'id'>;
 
 type CommentFormGroupContent = {
   id: FormControl<IComment['id'] | NewComment['id']>;
-  name: FormControl<IComment['name']>;
   content: FormControl<IComment['content']>;
   date: FormControl<IComment['date']>;
   like: FormControl<IComment['like']>;
   movie: FormControl<IComment['movie']>;
+  user: FormControl<IComment['user']>;
 };
 
 export type CommentFormGroup = FormGroup<CommentFormGroupContent>;
@@ -42,11 +43,11 @@ export class CommentFormService {
           validators: [Validators.required],
         },
       ),
-      name: new FormControl(commentRawValue.name),
       content: new FormControl(commentRawValue.content),
       date: new FormControl(commentRawValue.date),
       like: new FormControl(commentRawValue.like),
       movie: new FormControl(commentRawValue.movie),
+      user: new FormControl(commentRawValue.user),
     });
   }
 

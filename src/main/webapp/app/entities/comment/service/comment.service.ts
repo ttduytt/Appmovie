@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 
 import dayjs from 'dayjs/esm';
@@ -37,6 +37,11 @@ export class CommentService {
     return this.http
       .post<RestComment>(this.resourceUrl, copy, { observe: 'response' })
       .pipe(map(res => this.convertResponseFromServer(res)));
+  }
+
+  getCommentByMovie(movieId: number, sortBy: string): Observable<IComment[]> {
+    const params = new HttpParams().set('movieId', movieId).set('sortBy', sortBy);
+    return this.http.get<IComment[]>(`${this.resourceUrl}/movieComment`, { params });
   }
 
   update(comment: IComment): Observable<EntityResponseType> {

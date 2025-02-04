@@ -26,6 +26,21 @@ management:
         enabled: false
 
 spring:
+  kafka:
+    bootstrap-servers: localhost:9094
+    consumer:
+      group-id: notification-group
+      auto-offset-reset: earliest
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        spring.json.trusted.packages: 'com.mycompany.myapp.service.dto'
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    admin:
+      properties:
+        auto.create.topics.enable: true
   devtools:
     restart:
       enabled: false
@@ -48,10 +63,10 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: smtp.gmail.com # Địa chỉ SMTP của Gmail
+    port: 587
+    username: truongtrongduy10@gmail.com
+    password: dewdawefa12
   thymeleaf:
     cache: true
 
